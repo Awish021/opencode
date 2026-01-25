@@ -18,6 +18,7 @@ Create efficient GitLab CI pipelines with proper stage organization, caching, an
 - Configure GitLab Runners
 - Deploy to Kubernetes from GitLab
 - Implement GitOps workflows
+- Read and review Merge Requests
 
 ## Basic Pipeline Structure
 
