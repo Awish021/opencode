@@ -258,9 +258,3 @@ trigger-child:
 8. **Enable security scans** on default branch.
 9. **Store secrets** in CI/CD variables.
 10. **Measure duration** and optimize hotspots.
-
-## Related Skills
-
-- `github-actions-templates` - For GitHub Actions
-- `deployment-pipeline-design` - For architecture
-- `secrets-management` - For secrets handling
