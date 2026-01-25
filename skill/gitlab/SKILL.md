@@ -5,20 +5,19 @@ description: Build GitLab CI/CD pipelines with multi-stage workflows, caching, a
 
 # GitLab CI Patterns
 
-Comprehensive GitLab CI/CD pipeline patterns for automated testing, building, and deployment.
+Practical GitLab CI/CD patterns for reliable builds, tests, and deployments.
 
 ## Purpose
 
-Create efficient GitLab CI pipelines with proper stage organization, caching, and deployment strategies.
+Provide ready-to-use pipeline layouts, caching recipes, and deployment workflows.
 
 ## When to Use
 
-- Automate GitLab-based CI/CD
-- Implement multi-stage pipelines
-- Configure GitLab Runners
-- Deploy to Kubernetes from GitLab
-- Implement GitOps workflows
-- Read and review Merge Requests
+- Setting up or refactoring GitLab CI pipelines
+- Adding caching and artifacts
+- Building container images in CI
+- Deploying to Kubernetes
+- Managing multi-environment promotion
 
 ## Basic Pipeline Structure
 
@@ -247,23 +246,18 @@ trigger-child:
     strategy: depend
 ```
 
-## Reference Files
-
-- `assets/gitlab-ci.yml.template` - Complete pipeline template
-- `references/pipeline-stages.md` - Stage organization patterns
-
 ## Best Practices
 
-1. **Use specific image tags** (node:20, not node:latest)
-2. **Cache dependencies** appropriately
-3. **Use artifacts** for build outputs
-4. **Implement manual gates** for production
-5. **Use environments** for deployment tracking
-6. **Enable merge request pipelines**
-7. **Use pipeline schedules** for recurring jobs
-8. **Implement security scanning**
-9. **Use CI/CD variables** for secrets
-10. **Monitor pipeline performance**
+1. **Pin images** (node:20, not node:latest).
+2. **Cache dependencies** with stable keys.
+3. **Persist build outputs** via artifacts.
+4. **Gate production** with manual approval.
+5. **Track deployments** using environments.
+6. **Run MR pipelines** for fast feedback.
+7. **Schedule jobs** for recurring checks.
+8. **Enable security scans** on default branch.
+9. **Store secrets** in CI/CD variables.
+10. **Measure duration** and optimize hotspots.
 
 ## Related Skills
 
