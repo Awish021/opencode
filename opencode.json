@@ -1,5 +1,8 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "plugin": [
+    "opencode-gemini-auth@latest"
+  ],
   "mcp": {
     "Notion": {
       "enabled": false,
@@ -18,6 +21,12 @@
       "type": "remote",
       "url": "https://gitlab.com/api/v4/mcp",
       "oauth": {}
+    }
+  },
+  "permission": {
+    "external_directory": {
+      "*": "ask",
+      "/Users/avishayshamay/src/cur_pipeline_azure/*": "allow"
     }
   }
 }
