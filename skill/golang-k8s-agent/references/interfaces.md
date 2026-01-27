@@ -1,6 +1,6 @@
 # Interface Design and Composition
 
-> Reference for: Golang Pro
+> Reference for: Golang K8s Agent
 > Load when: Interface design, io.Reader/Writer, composition patterns
 
 ## Small, Focused Interfaces

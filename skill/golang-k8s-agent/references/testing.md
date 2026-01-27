@@ -1,6 +1,6 @@
 # Testing and Benchmarking
 
-> Reference for: Golang Pro
+> Reference for: Golang K8s Agent
 > Load when: Table-driven tests, benchmarks, fuzzing, test patterns
 
 ## Table-Driven Tests

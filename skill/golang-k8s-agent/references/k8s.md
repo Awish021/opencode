@@ -1,6 +1,6 @@
 # Kubernetes Controllers
 
-> Reference for: Golang Pro
+> Reference for: Golang K8s Agent
 > Load when: Kubernetes controllers, reconcile loops, CRDs, controller-runtime
 
 ## What This Covers
@@ -62,6 +62,10 @@ func main() {
 ### RBAC + Scheme Registration
 
 ```go
+// +kubebuilder:rbac:groups=example.com,resources=widgets,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=example.com,resources=widgets/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=example.com,resources=widgets/finalizers,verbs=update
+
 import (
     "k8s.io/apimachinery/pkg/runtime"
     clientgoscheme "k8s.io/client-go/kubernetes/scheme"
@@ -87,13 +91,17 @@ func (r *WidgetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
         if apierrors.IsNotFound(err) {
             return ctrl.Result{}, nil
         }
-        return ctrl.Result{RequeueAfter: 10 * time.Second}, err
+        return ctrl.Result{}, err
+    }
+
+    if !widget.DeletionTimestamp.IsZero() {
+        return r.handleDeletion(ctx, &widget)
     }
 
     if widget.Spec.Replicas == nil {
         widget.Spec.Replicas = ptr.To[int32](1)
         if err := r.Update(ctx, &widget); err != nil {
-            return ctrl.Result{RequeueAfter: 5 * time.Second}, err
+            return ctrl.Result{}, err
         }
     }
 
@@ -105,15 +113,15 @@ func (r *WidgetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 
 ```go
 func requeueOnError(err error) (ctrl.Result, error) {
-    if err == nil {
-        return ctrl.Result{}, nil
+    if err != nil {
+        return ctrl.Result{}, err
     }
 
-    if apierrors.IsConflict(err) || apierrors.IsServerTimeout(err) {
-        return ctrl.Result{RequeueAfter: 5 * time.Second}, err
-    }
+    return ctrl.Result{}, nil
+}
 
-    return ctrl.Result{RequeueAfter: 30 * time.Second}, err
+func requeueAfter(delay time.Duration) (ctrl.Result, error) {
+    return ctrl.Result{RequeueAfter: delay}, nil
 }
 ```
 
@@ -121,6 +129,7 @@ func requeueOnError(err error) (ctrl.Result, error) {
 
 ```go
 func (r *WidgetReconciler) updateStatus(ctx context.Context, widget *myv1.Widget, reason string) error {
+    patch := client.MergeFrom(widget.DeepCopy())
     meta.SetStatusCondition(&widget.Status.Conditions, metav1.Condition{
         Type:               "Ready",
         Status:             metav1.ConditionTrue,
@@ -128,7 +137,7 @@ func (r *WidgetReconciler) updateStatus(ctx context.Context, widget *myv1.Widget
         ObservedGeneration: widget.GetGeneration(),
         LastTransitionTime: metav1.Now(),
     })
-    return r.Status().Update(ctx, widget)
+    return r.Status().Patch(ctx, widget, patch)
 }
 ```
 
@@ -149,7 +158,7 @@ func (r *WidgetReconciler) handleDeletion(ctx context.Context, widget *myv1.Widg
     if !widget.DeletionTimestamp.IsZero() {
         if controllerutil.ContainsFinalizer(widget, finalizerName) {
             if err := r.cleanupExternalResources(ctx, widget); err != nil {
-                return ctrl.Result{RequeueAfter: 10 * time.Second}, err
+                return ctrl.Result{}, err
             }
             controllerutil.RemoveFinalizer(widget, finalizerName)
             return ctrl.Result{}, r.Update(ctx, widget)
@@ -170,11 +179,10 @@ func (r *WidgetReconciler) ensureOwned(ctx context.Context, widget *myv1.Widget)
         },
     }
 
-    if err := controllerutil.SetControllerReference(widget, deployment, r.Scheme); err != nil {
-        return err
-    }
-
-    return r.Create(ctx, deployment)
+    _, err := controllerutil.CreateOrUpdate(ctx, r.Client, deployment, func() error {
+        return controllerutil.SetControllerReference(widget, deployment, r.Scheme)
+    })
+    return err
 }
 ```
 
@@ -196,7 +204,7 @@ func (r *WidgetReconciler) SetupWithManager(mgr ctrl.Manager) error {
 - Use `context.Context` for all API calls
 - Requeue on transient errors with backoff
 - Avoid busy loops and tight resyncs
-- Ensure informer cache sync before acting
+- Ensure informer cache sync when using a custom cache or bypassing `mgr.Start`
 - Use structured logging consistently
 - Update status with conditions and `ObservedGeneration`
 - Handle finalizers before delete completion
@@ -245,6 +253,17 @@ defer func() {
 - Expose metrics via controller-runtime metrics endpoint
 - Enable leader election for multi-replica deployments
 - Emit Kubernetes events for user-visible changes
+
+## Quick Reference
+
+| Topic | Guidance |
+| --- | --- |
+| Requeue on error | Return the error and let controller-runtime backoff |
+| Deterministic delay | Return `RequeueAfter` with a nil error |
+| Deletion handling | Short-circuit reconcile when `DeletionTimestamp` is set |
+| Status updates | Prefer `Status().Patch` with `client.MergeFrom` |
+| Child resources | Use `CreateOrUpdate` for idempotency |
+| Cache sync | Only required with custom cache usage |
 
 ## Output Format
 

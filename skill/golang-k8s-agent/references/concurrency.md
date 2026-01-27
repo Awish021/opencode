@@ -1,6 +1,6 @@
 # Concurrency Patterns
 
-> Reference for: Golang Pro
+> Reference for: Golang K8s Agent
 > Load when: Goroutines, channels, select, concurrency patterns
 
 ## Goroutine Lifecycle Management

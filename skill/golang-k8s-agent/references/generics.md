@@ -1,6 +1,6 @@
 # Generics and Type Parameters
 
-> Reference for: Golang Pro
+> Reference for: Golang K8s Agent
 > Load when: Type parameters, constraints, generic functions, Go 1.18+
 
 ## Basic Type Parameters
