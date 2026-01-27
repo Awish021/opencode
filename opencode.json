@@ -22,11 +22,5 @@
       "url": "https://gitlab.com/api/v4/mcp",
       "oauth": {}
     }
-  },
-  "permission": {
-    "external_directory": {
-      "*": "ask",
-      "/Users/avishayshamay/src/cur_pipeline_azure/*": "allow"
-    }
   }
 }
