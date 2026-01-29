@@ -41,6 +41,7 @@ OpenCode also provides built-in agents like `general` and `explore` that are not
 - `skill/pytest-tests/SKILL.md` - Pytest testing patterns and TDD advice.
 - `skill/golang-k8s-agent/SKILL.md` - Go, gRPC, and Kubernetes patterns.
 - `skill/pyspark-databricks/SKILL.md` - PySpark ETL on Databricks.
+- `skill/google-workspace/SKILL.md` - Google Workspace API integration patterns.
 
 ## Usage Conventions
 
