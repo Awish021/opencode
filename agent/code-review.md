@@ -2,7 +2,8 @@
 description: Quality, security, and performance code review specialist
 mode: subagent
 temperature: 0.2
-model: google/gemini-3-pro-preview
+# model: google/gemini-3-pro-preview
+model: anthropic/claude-opus-4-6
 tools:
   read: true
   list: true
