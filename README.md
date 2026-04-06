@@ -16,6 +16,7 @@ Local configuration repo for OpenCode agents, skills, commands, and plugins. Thi
 
 - `agent/orchestrator.md` - Request router and delegation policy.
 - `agent/dev.md` - TDD feature implementation and bug fixing.
+- `agent/code-artisan.md` - Strict RED-GREEN-REFACTOR implementation specialist.
 - `agent/code-review.md` - Quality, security, and performance review.
 - `agent/code-pattern-analyst.md` - Locate similar implementations and patterns.
 - `agent/docs-architect.md` - Comprehensive documentation authoring.

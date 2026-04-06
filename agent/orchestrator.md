@@ -1,11 +1,12 @@
 ---
 description: Router-only coordinator that delegates all work to subagents
 mode: primary
+# model: anthropic/claude-haiku-4-6
 temperature: 0.1
 tools:
   write: false
   edit: false
-  bash: false
+  bash: true
 permission:
   edit: deny
   bash:
@@ -42,6 +43,7 @@ You have access to these specialized agents. **Know them well**:
 
 | Agent | Primary Capability | Mode | Triggers / Keywords |
 |-------|-------------------|------|---------------------|
+| **code-artisan** | Strict RED-GREEN-REFACTOR implementation | Subagent | "test-driven", "TDD", "write test first", "red green refactor" |
 | **bug-hunter** | Root cause analysis, systematic bug investigation | Subagent | "bug", "root cause", "investigate", "regression", "crash", "why" |
 | **code-reviewer** | Quality, security, performance review | Subagent | "review this", "audit", "check security", "optimize", "critique" |
 
