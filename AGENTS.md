@@ -59,3 +59,4 @@ Before you consider a task done:
 1. Confirm all tests or commands you touched actually passed (list them if I ask).
 2. Summarize what changed, with specific file and line references.
 3. Call out any TODOs, follow-up work, or uncertainties so I'm never surprised later.
+4. Prefer code-artisan subagent over dev subagent for coding tasks.
